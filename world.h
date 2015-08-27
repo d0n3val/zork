@@ -3,7 +3,6 @@
 
 #include <string>
 #include <list>
-#include "room.h"
 
 using namespace std;
 
@@ -17,11 +16,11 @@ public :
 	World();
 	~World();
 
-	bool ReceiveInput(const std::string& input);
+	bool ReceiveInput(const string& command, const string& arguments);
 
 private:
 
-	list<Room*> rooms;
+	list<Entity*> entities;
 	Creature* player;
 };
 

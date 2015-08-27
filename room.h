@@ -20,7 +20,6 @@ public:
 	void AddExit(const char* name, const char* description, Room* destination);
 
 public :
-	list<Exit*> exits;
 };
 
 #endif //__Room__

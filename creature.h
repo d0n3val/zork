@@ -15,6 +15,7 @@ public:
 	~Creature();
 
 	virtual bool Go(const string& direction);
+	virtual void Look(const string& arguments) const;
 
 	Room* GetRoom() const
 	{

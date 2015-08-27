@@ -25,6 +25,9 @@
     <ClCompile Include="exit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="world.h">
@@ -40,6 +43,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="exit.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globals.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

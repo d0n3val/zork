@@ -1,6 +1,10 @@
 #include <iostream>
+#include "globals.h"
 #include "entity.h"
 #include "creature.h"
+#include "item.h"
+#include "exit.h"
+#include "room.h"
 #include "world.h"
 
 // ----------------------------------------------------
@@ -10,48 +14,56 @@ World::World()
 	Room* forest = new Room("Forest", "You are surrounded by tall trees. It feels like a huge forest someone could get lost easily.");
 	Room* house = new Room("House", "You are inside a beautiful but small white house.");
 
-	forest->AddExit("west", "Little path", house);
-	house->AddExit("east", "Little path", forest);
+	Exit* ex1 = new Exit("west", "east", "Little path", house, forest);
 
-	rooms.push_back(forest);
+	entities.push_back(forest);
+	entities.push_back(house);
+	entities.push_back(ex1);
+
+	// Items -----
+	Item* mailbox = new Item("Mailbox", "Looks like it might contain something.", house);
+
+	entities.push_back(mailbox);
 
 	// Player ----
 	player = new Creature("Player", "You are an awesome adventurer!", forest);
+
+	entities.push_back(player);
 }
 
 // ----------------------------------------------------
 World::~World()
 {
-	for(list<Room*>::iterator it = rooms.begin(); it != rooms.end(); ++it)
+	for(list<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
 		delete *it;
 }
 
 // ----------------------------------------------------
-bool World::ReceiveInput(const string& input)
+bool World::ReceiveInput(const string& command, const string& arguments)
 {
 	bool ret = true;
 	
-	if(input == "look")
+	if(Same(command,"look"))
 	{
-		player->parent->Look();
+		player->Look(arguments);
 	}
-	else if(input == "look me")
+	else if(Same(command,"go"))
 	{
-		player->Look();
+		player->Go(arguments);
 	}
-	else if(input == "north" || input == "n")
+	else if(Same(command, "north") || Same(command, "n"))
 	{
 		player->Go("north");
 	}
-	else if(input == "south" || input == "s")
+	else if(Same(command, "south") || Same(command, "s"))
 	{
 		player->Go("south");
 	}
-	else if(input == "east" || input == "e")
+	else if(Same(command, "east") || Same(command, "e"))
 	{
 		player->Go("east");
 	}
-	else if(input == "west" || input == "w")
+	else if(Same(command, "west") || Same(command, "w"))
 	{
 		player->Go("west");
 	}

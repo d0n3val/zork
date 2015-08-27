@@ -6,6 +6,15 @@
 
 using namespace std;
 
+enum EntityType
+{
+	ENTITY,
+	ROOM,
+	EXIT,
+	ITEM,
+	CREATURE
+};
+
 class Entity
 {
 public:
@@ -15,6 +24,7 @@ public:
 	virtual void Look() const;
 
 public :
+	EntityType type;
 	std::string name;
 	std::string description;
 
