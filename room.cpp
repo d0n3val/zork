@@ -72,3 +72,4 @@ Exit* Room::GetExit(const string& direction) const
 	return NULL;
 }
 
+

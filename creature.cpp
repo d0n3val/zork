@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "room.h"
 #include "exit.h"
+#include "item.h"
 #include "creature.h"
 
 // ----------------------------------------------------
@@ -52,8 +53,59 @@ bool Creature::Go(const string& direction)
 	}
 
 	cout << "You take direction " << direction << "...\n";
-	parent = exit->GetDestinationFrom((Room*) parent);
+	ChangeParentTo(exit->GetDestinationFrom((Room*) parent));
 	parent->Look();
+
+	return true;
+}
+
+
+// ----------------------------------------------------
+bool Creature::Take(const string& arguments)
+{
+	Item* item = (Item*) parent->Find(arguments, ITEM);
+
+	if(item == NULL)
+	{
+		cout << "There is no item here with that name\n";
+		return false;
+	}
+
+	cout << "You take " << item->name << "...\n";
+	item->ChangeParentTo(this);
+
+	return true;
+}
+
+// ----------------------------------------------------
+void Creature::Inventory() const
+{
+	list<Entity*> items;
+	FindAll(ITEM, items);
+
+	if(items.size() == 0)
+	{
+		cout << "You do not own any item\n";
+		return;
+	}
+
+	for(list<Entity*>::const_iterator it = items.begin(); it != items.cend(); ++it)
+		cout << (*it)->name << "\n";
+}
+
+// ----------------------------------------------------
+bool Creature::Drop(const string& arguments)
+{
+	Item* item = (Item*)Find(arguments, ITEM);
+
+	if(item == NULL)
+	{
+		cout << "There is no item on you with that name\n";
+		return false;
+	}
+
+	cout << "You drop " << item->name << "...\n";
+	item->ChangeParentTo(parent);
 
 	return true;
 }

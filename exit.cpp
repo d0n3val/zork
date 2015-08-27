@@ -9,8 +9,6 @@ closed(false), locked(false), key(NULL), one_way(one_way), destination(destinati
 {
 	type = EXIT;
 
-	origin->container.push_back(this);
-
 	if(one_way == false)
 		destination->container.push_back(this);
 }

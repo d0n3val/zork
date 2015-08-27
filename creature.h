@@ -16,6 +16,9 @@ public:
 
 	virtual bool Go(const string& direction);
 	virtual void Look(const string& arguments) const;
+	virtual bool Take(const string& arguments);
+	virtual bool Drop(const string& arguments);
+	virtual void Inventory() const;
 
 	Room* GetRoom() const
 	{

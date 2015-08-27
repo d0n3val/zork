@@ -8,7 +8,6 @@ Item::Item(const char* title, const char* description, Room* room) :
 Entity(title, description, (Entity*)room)
 {
 	type = ITEM;
-	room->container.push_back(this);
 }
 
 // ----------------------------------------------------

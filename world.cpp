@@ -67,6 +67,18 @@ bool World::ReceiveInput(const string& command, const string& arguments)
 	{
 		player->Go("west");
 	}
+	else if(Same(command, "take") || Same(command, "pick"))
+	{
+		player->Take(arguments);
+	}
+	else if(Same(command, "drop") || Same(command, "remove"))
+	{
+		player->Drop(arguments);
+	}
+	else if(Same(command, "inventory") || Same(command, "i"))
+	{
+		player->Inventory();
+	}
 	else
 		ret = false;
 

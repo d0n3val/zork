@@ -6,6 +6,7 @@
 #include "entity.h"
 
 class Exit;
+class Item;
 
 using namespace std;
 
@@ -16,8 +17,8 @@ public:
 	~Room();
 
 	void Look() const;
+
 	Exit* GetExit(const string& direction) const;
-	void AddExit(const char* name, const char* description, Room* destination);
 
 public :
 };
