@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <conio.h>
 #include "globals.h"
 #include "world.h"
 
@@ -29,28 +30,50 @@ int main()
 	string player_input;
 
 	World my_world;
-	my_world.ReceiveInput("look", "");
+	my_world.Tick("look", "");
+
+	string command;
+	string arguments;
 
 	while(1)
 	{
-		cout << "\n> ";
-		getline(cin, player_input);
-		size_t pos = player_input.find(' ');
-		
-		string command = player_input;
-		string arguments = "";
+		char key;
 
-		if(pos != string::npos)
+
+		if(_kbhit() != 0)
 		{
-			command = player_input.substr(0, pos);
-			arguments = player_input.substr(pos+1);
-		} 
+			key = _getch();
+			if(key != '\r')
+			{
+				player_input += key;
+				cout << key;
+			}
+			else
+			{	
+				//getline(cin, player_input);
+				size_t pos = player_input.find(' ');
+
+				command = player_input;
+
+				if(pos != string::npos)
+				{
+					command = player_input.substr(0, pos);
+					arguments = player_input.substr(pos + 1);
+				}
+
+				player_input = "";
+				cout << "\n> ";
+			}
+		}
 
 		if(Same(command, "quit"))
 			break;
 
-		if(my_world.ReceiveInput(command, arguments) == false)
+		if(my_world.Tick(command, arguments) == false)
 			cout << "Sorry, I do not understand your command.";
+
+		command = "";
+		arguments = "";
 	}
 
 	cout << "\nThanks for playing, Bye!\n";

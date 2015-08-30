@@ -3,6 +3,9 @@
 
 #include <string>
 #include <list>
+#include <time.h>
+
+#define TICK_FREQUENCY 0.5f
 
 using namespace std;
 
@@ -16,10 +19,13 @@ public :
 	World();
 	~World();
 
-	bool ReceiveInput(const string& command, const string& arguments);
+	bool Tick(const string& command, const string& arguments);
+	bool ParseCommand(const string& command, const string& arguments);
+	void GameLoop();
 
 private:
 
+	clock_t tick_timer;
 	list<Entity*> entities;
 	Player* player;
 };

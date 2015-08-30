@@ -11,6 +11,8 @@
 // ----------------------------------------------------
 World::World()
 {
+	tick_timer = clock();
+
 	// Rooms ----
 	Room* forest = new Room("Forest", "You are surrounded by tall trees. It feels like a huge forest someone could get lost easily.");
 	Room* house = new Room("House", "You are inside a beautiful but small white house.");
@@ -26,6 +28,11 @@ World::World()
 
 	entities.push_back(mailbox);
 
+	// Creatures ----
+	Creature* butler = new Creature("Butler", "It's James, the house Butler.", house);
+	
+	entities.push_back(butler);
+
 	// Player ----
 	player = new Player("Hero", "You are an awesome adventurer!", forest);
 
@@ -37,13 +44,40 @@ World::~World()
 {
 	for(list<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
 		delete *it;
+
+	entities.clear();
 }
 
 // ----------------------------------------------------
-bool World::ReceiveInput(const string& command, const string& arguments)
+bool World::Tick(const string& command, const string& arguments)
 {
 	bool ret = true;
-	
+
+	if(command.length() > 0)
+		ret = ParseCommand(command, arguments);
+
+	GameLoop();
+
+	return ret;
+}
+
+// ----------------------------------------------------
+void World::GameLoop()
+{
+	clock_t now = clock();
+
+	if((now - tick_timer) / CLOCKS_PER_SEC > TICK_FREQUENCY)
+	{
+		cout << "Tick\n";
+		tick_timer = now;
+	}
+}
+
+// ----------------------------------------------------
+bool World::ParseCommand(const string& command, const string& arguments)
+{
+	bool ret = true;
+
 	if(Same(command,"look") || Same(command, "l"))
 	{
 		player->Look(arguments);
