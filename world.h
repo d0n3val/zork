@@ -7,7 +7,7 @@
 using namespace std;
 
 class Entity;
-class Creature;
+class Player;
 
 class World
 {
@@ -21,7 +21,7 @@ public :
 private:
 
 	list<Entity*> entities;
-	Creature* player;
+	Player* player;
 };
 
 #endif //__World__

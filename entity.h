@@ -12,7 +12,8 @@ enum EntityType
 	ROOM,
 	EXIT,
 	ITEM,
-	CREATURE
+	CREATURE,
+	PLAYER
 };
 
 class Entity

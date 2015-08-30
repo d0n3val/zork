@@ -5,6 +5,7 @@
 #include "item.h"
 #include "exit.h"
 #include "room.h"
+#include "player.h"
 #include "world.h"
 
 // ----------------------------------------------------
@@ -26,7 +27,7 @@ World::World()
 	entities.push_back(mailbox);
 
 	// Player ----
-	player = new Creature("Player", "You are an awesome adventurer!", forest);
+	player = new Player("Hero", "You are an awesome adventurer!", forest);
 
 	entities.push_back(player);
 }
@@ -43,7 +44,7 @@ bool World::ReceiveInput(const string& command, const string& arguments)
 {
 	bool ret = true;
 	
-	if(Same(command,"look"))
+	if(Same(command,"look") || Same(command, "l"))
 	{
 		player->Look(arguments);
 	}
