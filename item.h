@@ -8,15 +8,23 @@ class Room;
 
 using namespace std;
 
+enum ItemType
+{
+	COMMON,
+	WEAPON,
+	ARMOUR
+};
+
 class Item : public Entity
 {
 public:
-	Item(const char* name, const char* description, Room* room);
+	Item(const char* name, const char* description, Entity* parent, ItemType item_type = COMMON);
 	~Item();
 
-
 public :
-
+	int min_value;
+	int max_value;
+	ItemType item_type;
 };
 
 #endif //__Item__

@@ -24,6 +24,10 @@ void Entity::Look() const
 }
 
 // ----------------------------------------------------
+void Entity::Tick()
+{}
+
+// ----------------------------------------------------
 void Entity::ChangeParentTo(Entity* new_parent)
 {
 	if(parent != NULL)
@@ -33,6 +37,30 @@ void Entity::ChangeParentTo(Entity* new_parent)
 
 	if(parent != NULL)
 		parent->container.push_back(this);
+}
+
+// ----------------------------------------------------
+bool Entity::Find(Entity* entity) const
+{
+	for(list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+	{
+		if((*it) == entity)
+			return true;
+	}
+
+	return false;
+}
+
+// ----------------------------------------------------
+Entity* Entity::Find(EntityType type) const
+{
+	for(list<Entity*>::const_iterator it = container.begin(); it != container.cend(); ++it)
+	{
+		if((*it)->type == type)
+			return *it;
+	}
+
+	return NULL;
 }
 
 // ----------------------------------------------------

@@ -20,7 +20,7 @@ Room::~Room()
 // ----------------------------------------------------
 void Room::Look() const
 {
-	cout << name << "\n";
+	cout << "\n" << name << "\n";
 	cout << description;
 
 	// List exits --
@@ -50,6 +50,8 @@ void Room::Look() const
 		{
 			Creature* cr = (Creature*)*it;
 			cout << "\nThere is someone else here: " << cr->name;
+			if(cr->IsAlive() == false)
+				cout << " (dead)";
 		}
 	}
 

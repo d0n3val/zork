@@ -5,6 +5,7 @@
 #include "entity.h"
 
 class Room;
+class Item;
 
 using namespace std;
 
@@ -19,14 +20,31 @@ public:
 	virtual bool Take(const string& arguments);
 	virtual bool Drop(const string& arguments);
 	virtual void Inventory() const;
+	virtual bool Equip(const string& arguments);
+	virtual bool UnEquip(const string& arguments);
+	virtual bool AutoEquip();
+	virtual void Tick();
 
-	Room* GetRoom() const
-	{
-		return (Room*) parent;
-	}
+	virtual bool Attack(const string& arguments);
+	virtual int MakeAttack();
+	virtual int ReceiveAttack(int damage);
+	virtual void Die();
+	virtual bool Loot(const string& arguments);
+
+	Room* GetRoom() const;
+	bool PlayerInRoom() const;
+	bool IsAlive() const;
 
 public :
 
+	int hit_points;
+	int min_damage;
+	int max_damage;
+	int min_protection;
+	int max_protection;
+	Creature* combat_target;
+	Item* weapon;
+	Item* armour;
 };
 
 #endif //__Creature__

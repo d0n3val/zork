@@ -25,21 +25,20 @@ bool Same(const string& a, const char* b)
 
 int main()
 {
-	cout << "Welcome to Zork!\n";
+	cout << "Welcome to MyZork!\n";
 	cout << "----------------\n\n";
 	string player_input;
 
 	World my_world;
 	my_world.Tick("look", "");
+	cout << "> ";
 
 	string command;
 	string arguments;
+	char key;
 
 	while(1)
 	{
-		char key;
-
-
 		if(_kbhit() != 0)
 		{
 			key = _getch();
@@ -50,7 +49,6 @@ int main()
 			}
 			else
 			{	
-				//getline(cin, player_input);
 				size_t pos = player_input.find(' ');
 
 				command = player_input;
@@ -60,9 +58,6 @@ int main()
 					command = player_input.substr(0, pos);
 					arguments = player_input.substr(pos + 1);
 				}
-
-				player_input = "";
-				cout << "\n> ";
 			}
 		}
 
@@ -70,10 +65,15 @@ int main()
 			break;
 
 		if(my_world.Tick(command, arguments) == false)
-			cout << "Sorry, I do not understand your command.";
+			cout << "\nSorry, I do not understand your command.\n";
 
-		command = "";
-		arguments = "";
+		if(command.length() > 0)
+		{
+			command = "";
+			arguments = "";
+			player_input = "";
+			cout << "> ";
+		}
 	}
 
 	cout << "\nThanks for playing, Bye!\n";

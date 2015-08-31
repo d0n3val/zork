@@ -16,6 +16,11 @@ public:
 	bool Take(const string& arguments);
 	bool Drop(const string& arguments);
 	void Inventory() const;
+	bool Equip(const string& arguments);
+	bool UnEquip(const string& arguments);
+	bool Examine(const string& arguments) const;
+	bool Attack(const string& arguments);
+	bool Loot(const string& arguments);
 
 public :
 
