@@ -21,6 +21,8 @@ public:
 	bool Examine(const vector<string>& args) const;
 	bool Attack(const vector<string>& args);
 	bool Loot(const vector<string>& args);
+	bool Lock(const vector<string>& args);
+	bool UnLock(const vector<string>& args);
 
 public :
 

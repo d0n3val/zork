@@ -176,6 +176,30 @@ bool Creature::AutoEquip()
 }
 
 // ----------------------------------------------------
+bool Creature::Lock(const vector<string>& args)
+{
+	if(!IsAlive())
+		return false;
+
+	Exit* exit = GetRoom()->GetExit(args[1]);
+
+	if(exit == NULL || exit->locked == true)
+		return false;
+
+	Item* item = (Item*)Find(args[3], ITEM);
+
+	if(item == NULL || exit->key != item)
+		return false;
+
+	if(PlayerInRoom())
+		cout << "\n" << name << "locks " << exit->GetNameFrom((Room*)parent) << "...\n";
+
+	exit->locked = true;
+
+	return true;
+}
+
+// ----------------------------------------------------
 bool Creature::UnLock(const vector<string>& args)
 {
 	if(!IsAlive())
@@ -192,9 +216,9 @@ bool Creature::UnLock(const vector<string>& args)
 		return false;
 
 	if(PlayerInRoom())
-		cout << name << "unlocks " << exit->GetNameFrom((Room*) parent) << "...\n";
+		cout << "\n" << name << "unlocks " << exit->GetNameFrom((Room*) parent) << "...\n";
 
-	exit->locked == false;
+	exit->locked = false;
 
 	return true;
 }

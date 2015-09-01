@@ -50,7 +50,13 @@ bool Player::Go(const vector<string>& args)
 
 	if(exit == NULL)
 	{
-		cout << "There is no exit at that direction.\n";
+		cout << "\nThere is no exit at '" << args[1] << "'.\n";
+		return false;
+	}
+
+	if(exit->locked)
+	{
+		cout << "\nThat exit is locked.\n";
 		return false;
 	}
 
@@ -247,6 +253,88 @@ bool Player::Loot(const vector<string>& args)
 	}
 	else
 		cout << "\nYou loot " << target->name << "'s corpse, but find nothing there.\n";
+
+	return true;
+}
+
+// ----------------------------------------------------
+bool Player::Lock(const vector<string>& args)
+{
+	if(!IsAlive())
+		return false;
+
+	Exit* exit = GetRoom()->GetExit(args[1]);
+
+	if(exit == NULL)
+	{
+		cout << "\nThere is no exit at '" << args[1] << "'.\n";
+		return false;
+	}
+
+	if(exit->locked == true)
+	{
+		cout << "\nThat exit is already locked.\n";
+		return false;
+	}
+
+	Item* item = (Item*)Find(args[3], ITEM);
+
+	if(item == NULL)
+	{
+		cout << "\Item '" << args[3] << "' not found in your inventory.\n";
+		return false;
+	}
+
+	if(exit->key != item)
+	{
+		cout << "\Item '" << item->name << "' is not the key for " << exit->GetNameFrom((Room*)parent) << ".\n";
+		return false;
+	}
+
+	cout << "\nYou lock " << exit->GetNameFrom((Room*)parent) << "...\n";
+
+	exit->locked = true;
+
+	return true;
+}
+
+// ----------------------------------------------------
+bool Player::UnLock(const vector<string>& args)
+{
+	if(!IsAlive())
+		return false;
+
+	Exit* exit = GetRoom()->GetExit(args[1]);
+
+	if(exit == NULL)
+	{
+		cout << "\nThere is no exit at '" << args[1] << "'.\n";
+		return false;
+	}
+
+	if(exit->locked == false)
+	{
+		cout << "\nThat exit is not locked.\n";
+		return false;
+	}
+
+	Item* item = (Item*)Find(args[3], ITEM);
+
+	if(item == NULL)
+	{
+		cout << "\nKey '" << args[3] << "' not found in your inventory.\n";
+		return false;
+	}
+
+	if(exit->key != item)
+	{
+		cout << "\nKey '" << item->name << "' is not the key for " << exit->GetNameFrom((Room*)parent) << ".\n";
+		return false;
+	}
+
+	cout << "\nYou unlock " << exit->GetNameFrom((Room*)parent) << "...\n";
+
+	exit->locked = false;
 
 	return true;
 }

@@ -23,6 +23,7 @@ public:
 	virtual bool Equip(const vector<string>& args);
 	virtual bool UnEquip(const vector<string>& args);
 	virtual bool AutoEquip();
+	virtual bool Lock(const vector<string>& args);
 	virtual bool UnLock(const vector<string>& args);
 	virtual void Tick();
 

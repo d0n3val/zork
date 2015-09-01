@@ -12,17 +12,15 @@ int main()
 {
 	char key;
 	string player_input;
-	vector<string> args(10);
-	args.clear();
+	vector<string> args;
+	args.reserve(10);
 
 	cout << "Welcome to MyZork!\n";
 	cout << "----------------\n";
 
 	World my_world;
+
 	args.push_back("look");
-	my_world.Tick(args);
-	args.clear();
-	cout << "> ";
 
 	while(1)
 	{
