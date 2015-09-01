@@ -7,26 +7,10 @@
 using namespace std;
 
 // -------------------------------------------------
-bool Same(const string& a, const string& b)
-{
-	return _stricmp(a.c_str(), b.c_str()) == 0;
-}
-
-bool Same(const char* a, const string& b)
-{
-	return _stricmp(a, b.c_str()) == 0;
-}
-
-bool Same(const string& a, const char* b)
-{
-	return _stricmp(a.c_str(), b) == 0;
-}
-// -------------------------------------------------
-
 int main()
 {
 	cout << "Welcome to MyZork!\n";
-	cout << "----------------\n\n";
+	cout << "----------------\n";
 	string player_input;
 
 	World my_world;
@@ -42,11 +26,22 @@ int main()
 		if(_kbhit() != 0)
 		{
 			key = _getch();
-			if(key != '\r')
+			if(key == '\b') // backspace
+			{
+				if(player_input.length() > 0)
+				{
+					player_input[player_input.length() - 1] = '\0';
+					cout << '\b';
+					cout << " ";
+					cout << '\b';
+				}
+			}
+			else if(key != '\r') // return
 			{
 				player_input += key;
 				cout << key;
 			}
+
 			else
 			{	
 				size_t pos = player_input.find(' ');

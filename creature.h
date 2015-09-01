@@ -30,6 +30,7 @@ public:
 	virtual int ReceiveAttack(int damage);
 	virtual void Die();
 	virtual bool Loot(const string& arguments);
+	virtual void Stats() const;
 
 	Room* GetRoom() const;
 	bool PlayerInRoom() const;

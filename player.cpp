@@ -190,6 +190,7 @@ bool Player::Examine(const string& arguments) const
 	}
 
 	target->Inventory();
+	target->Stats();
 
 	return true;
 }

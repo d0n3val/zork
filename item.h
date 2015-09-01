@@ -21,6 +21,8 @@ public:
 	Item(const char* name, const char* description, Entity* parent, ItemType item_type = COMMON);
 	~Item();
 
+	int GetValue() const;
+
 public :
 	int min_value;
 	int max_value;

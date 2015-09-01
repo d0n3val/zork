@@ -245,15 +245,17 @@ int Creature::MakeAttack()
 		combat_target = combat_target->combat_target = NULL;
 		return false;
 	}
-	int max = (weapon) ? weapon->max_value: max_damage;
-	int min = (weapon) ? weapon->min_value: min_damage;
 
-	int result = (max > 0) ? min + (rand() % (max-min)) : 0;
+	int result = (weapon) ? weapon->GetValue() : Roll(min_damage, max_damage);
 
 	if(PlayerInRoom())
 		cout << name << " attacks " << combat_target->name << " for " << result << "\n";
 
 	combat_target->ReceiveAttack(result);
+
+	// make the attacker react and take me as a target
+	if(combat_target->combat_target == NULL)
+		combat_target->combat_target = this;
 
 	return result;
 }
@@ -261,11 +263,7 @@ int Creature::MakeAttack()
 // ----------------------------------------------------
 int Creature::ReceiveAttack(int damage)
 {
-	int max = (armour) ? armour->max_value : max_protection;
-	int min = (armour) ? armour->min_value : min_protection;
-
-	int prot = (max > 0) ? min + (rand() % (max - min)) : 0;
-
+	int prot = (armour) ? armour->GetValue() : Roll(min_protection, max_protection);
 	int received = damage - prot;
 
 	hit_points -= received;
@@ -306,4 +304,15 @@ bool Creature::Loot(const string& arguments)
 	cout << "\n" << name << " loots " << target->name << "'s corpse\n";
 
 	return true;
+}
+
+// ----------------------------------------------------
+void Creature::Stats() const
+{
+	cout << "\nHit Points: " << hit_points;
+	cout << "\nAttack: (" << ((weapon) ? weapon->name : "no weapon") << ") ";
+	cout << ((weapon) ? weapon->min_value : min_damage) << "-" << ((weapon) ? weapon->max_value : max_damage);
+	cout << "\nProtection: (" << ((armour) ? armour->name : "no armour") << ") ";
+	cout << ((armour) ? armour->min_value : min_protection) << "-" << ((armour) ? armour->max_value : max_protection);
+	cout << "\n";
 }

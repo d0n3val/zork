@@ -1,6 +1,7 @@
 #include <iostream>
 #include "room.h"
 #include "exit.h"
+#include "globals.h"
 #include "item.h"
 
 // ----------------------------------------------------
@@ -14,3 +15,9 @@ Entity(title, description, parent), item_type(item_type)
 // ----------------------------------------------------
 Item::~Item()
 {}
+
+// ----------------------------------------------------
+int Item::GetValue() const
+{
+	return Roll(min_value, max_value);
+}

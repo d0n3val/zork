@@ -147,6 +147,10 @@ bool World::ParseCommand(const string& command, const string& arguments)
 	{
 		player->Loot(arguments);
 	}
+	else if(Same(command, "stats") || Same(command, "st"))
+	{
+		player->Stats();
+	}
 	else
 		ret = false;
 
