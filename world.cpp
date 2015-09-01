@@ -16,12 +16,19 @@ World::World()
 	// Rooms ----
 	Room* forest = new Room("Forest", "You are surrounded by tall trees. It feels like a huge forest someone could get lost easily.");
 	Room* house = new Room("House", "You are inside a beautiful but small white house.");
+	Room* basement = new Room("Basement", "The basement features old furniture and dim light.");
 
 	Exit* ex1 = new Exit("west", "east", "Little path", house, forest);
+	Exit* ex2 = new Exit("down", "up", "Stairs", house, basement);
+	ex2->locked = true;
+	
 
 	entities.push_back(forest);
 	entities.push_back(house);
+	entities.push_back(basement);
+
 	entities.push_back(ex1);
+	entities.push_back(ex2);
 
 	// Creatures ----
 	Creature* butler = new Creature("Butler", "It's James, the house Butler.", house);
@@ -31,9 +38,15 @@ World::World()
 
 	// Items -----
 	Item* mailbox = new Item("Mailbox", "Looks like it might contain something.", house);
+	Item* key = new Item("Key", "Old iron key.", house);
+	ex2->key = key;
+
 	Item* sword = new Item("Sword", "A simple old and rusty sword.", forest, WEAPON);
 	sword->min_value = 2;
 	sword->max_value = 6;
+
+	Item* sword2(sword);
+	sword2->parent = butler;
 
 	Item* shield = new Item("Shield", "An old wooden shield.", butler, ARMOUR);
 	shield->min_value = 1;
@@ -60,12 +73,12 @@ World::~World()
 }
 
 // ----------------------------------------------------
-bool World::Tick(const string& command, const string& arguments)
+bool World::Tick(vector<string>& args)
 {
 	bool ret = true;
 
-	if(command.length() > 0)
-		ret = ParseCommand(command, arguments);
+	if(args.size() > 0 && args[0].length() > 0)
+		ret = ParseCommand(args);
 
 	GameLoop();
 
@@ -87,69 +100,77 @@ void World::GameLoop()
 }
 
 // ----------------------------------------------------
-bool World::ParseCommand(const string& command, const string& arguments)
+bool World::ParseCommand(vector<string>& args)
 {
 	bool ret = true;
 
-	if(Same(command,"look") || Same(command, "l"))
+	if(Same(args[0],"look") || Same(args[0], "l"))
 	{
-		player->Look(arguments);
+		player->Look(args);
 	}
-	else if(Same(command,"go"))
+	else if(Same(args[0],"go"))
 	{
-		player->Go(arguments);
+		player->Go(args);
 	}
-	else if(Same(command, "north") || Same(command, "n"))
+	else if(Same(args[0], "north") || Same(args[0], "n"))
 	{
-		player->Go("north");
+		(args.size() == 1) ? args.push_back("north") : args[1] = "north";
+		player->Go(args);
 	}
-	else if(Same(command, "south") || Same(command, "s"))
+	else if(Same(args[0], "south") || Same(args[0], "s"))
 	{
-		player->Go("south");
+		(args.size() == 1) ? args.push_back("south") : args[1] = "south";
+		player->Go(args);
 	}
-	else if(Same(command, "east") || Same(command, "e"))
+	else if(Same(args[0], "east") || Same(args[0], "e"))
 	{
-		player->Go("east");
+		(args.size() == 1) ? args.push_back("east") : args[1] = "east";
+		player->Go(args);
 	}
-	else if(Same(command, "west") || Same(command, "w"))
+	else if(Same(args[0], "west") || Same(args[0], "w"))
 	{
-		player->Go("west");
+		(args.size() == 1) ? args.push_back("west") : args[1] = "west";
+		player->Go(args);
 	}
-	else if(Same(command, "take") || Same(command, "pick"))
+	else if(Same(args[0], "take") || Same(args[0], "pick"))
 	{
-		player->Take(arguments);
+		player->Take(args);
 	}
-	else if(Same(command, "drop") || Same(command, "remove"))
+	else if(Same(args[0], "drop") || Same(args[0], "remove"))
 	{
-		player->Drop(arguments);
+		player->Drop(args);
 	}
-	else if(Same(command, "inventory") || Same(command, "i"))
+	else if(Same(args[0], "inventory") || Same(args[0], "i"))
 	{
 		player->Inventory();
 	}
-	else if(Same(command, "equip") || Same(command, "eq"))
+	else if(Same(args[0], "equip") || Same(args[0], "eq"))
 	{
-		player->Equip(arguments);
+		player->Equip(args);
 	}
-	else if(Same(command, "unequip") || Same(command, "uneq"))
+	else if(Same(args[0], "unequip") || Same(args[0], "uneq"))
 	{
-		player->UnEquip(arguments);
+		player->UnEquip(args);
 	}
-	else if(Same(command, "examine") || Same(command, "ex"))
+	else if(Same(args[0], "examine") || Same(args[0], "ex"))
 	{
-		player->Examine(arguments);
+		player->Examine(args);
 	}
-	else if(Same(command, "attack") || Same(command, "at"))
+	else if(Same(args[0], "attack") || Same(args[0], "at"))
 	{
-		player->Attack(arguments);
+		player->Attack(args);
 	}
-	else if(Same(command, "loot") || Same(command, "lt"))
+	else if(Same(args[0], "loot") || Same(args[0], "lt"))
 	{
-		player->Loot(arguments);
+		player->Loot(args);
 	}
-	else if(Same(command, "stats") || Same(command, "st"))
+	else if(Same(args[0], "stats") || Same(args[0], "st"))
 	{
 		player->Stats();
+	}
+	else if(Same(args[0], "unlock") || Same(args[0], "unl"))
+	{
+		player->UnLock(args);
 	}
 	else
 		ret = false;

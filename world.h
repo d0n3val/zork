@@ -19,8 +19,8 @@ public :
 	World();
 	~World();
 
-	bool Tick(const string& command, const string& arguments);
-	bool ParseCommand(const string& command, const string& arguments);
+	bool Tick(vector<string>& args);
+	bool ParseCommand(vector<string>& args);
 	void GameLoop();
 
 private:

@@ -21,7 +21,7 @@ Creature::~Creature()
 {}
 
 // ----------------------------------------------------
-void Creature::Look(const string& arguments) const
+void Creature::Look(const vector<string>& args) const
 {
 	if(IsAlive())
 	{
@@ -36,18 +36,18 @@ void Creature::Look(const string& arguments) const
 }
 
 // ----------------------------------------------------
-bool Creature::Go(const string& direction)
+bool Creature::Go(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Exit* exit = GetRoom()->GetExit(direction);
+	Exit* exit = GetRoom()->GetExit(args[1]);
 
 	if(exit == NULL)
 		return false;
 
 	if(PlayerInRoom())
-		cout << name << "goes " << direction << "...\n";
+		cout << name << "goes " << args[1] << "...\n";
 
 	ChangeParentTo(exit->GetDestinationFrom((Room*) parent));
 
@@ -55,12 +55,12 @@ bool Creature::Go(const string& direction)
 }
 
 // ----------------------------------------------------
-bool Creature::Take(const string& arguments)
+bool Creature::Take(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Item* item = (Item*) parent->Find(arguments, ITEM);
+	Item* item = (Item*)parent->Find(args[1], ITEM);
 
 	if(item == NULL)
 		return false;
@@ -98,12 +98,12 @@ void Creature::Inventory() const
 }
 
 // ----------------------------------------------------
-bool Creature::Equip(const string& arguments)
+bool Creature::Equip(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Item* item = (Item*)Find(arguments, ITEM);
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 		return false;
@@ -129,12 +129,12 @@ bool Creature::Equip(const string& arguments)
 }
 
 // ----------------------------------------------------
-bool Creature::UnEquip(const string& arguments)
+bool Creature::UnEquip(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Item* item = (Item*)Find(arguments, ITEM);
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 		return false;
@@ -176,12 +176,36 @@ bool Creature::AutoEquip()
 }
 
 // ----------------------------------------------------
-bool Creature::Drop(const string& arguments)
+bool Creature::UnLock(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Item* item = (Item*)Find(arguments, ITEM);
+	Exit* exit = GetRoom()->GetExit(args[1]);
+
+	if(exit == NULL || exit->locked == false)
+		return false;
+
+	Item* item = (Item*)Find(args[3], ITEM);
+
+	if(item == NULL || exit->key != item)
+		return false;
+
+	if(PlayerInRoom())
+		cout << name << "unlocks " << exit->GetNameFrom((Room*) parent) << "...\n";
+
+	exit->locked == false;
+
+	return true;
+}
+
+// ----------------------------------------------------
+bool Creature::Drop(const vector<string>& args)
+{
+	if(!IsAlive())
+		return false;
+
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 		return false;
@@ -225,9 +249,9 @@ void Creature::Tick()
 }
 
 // ----------------------------------------------------
-bool Creature::Attack(const string& arguments)
+bool Creature::Attack(const vector<string>& args)
 {
-	Creature *target = (Creature*)parent->Find(arguments, CREATURE);
+	Creature *target = (Creature*)parent->Find(args[1], CREATURE);
 
 	if(target == NULL)
 		return false;
@@ -285,9 +309,9 @@ void Creature::Die()
 }
 
 // ----------------------------------------------------
-bool Creature::Loot(const string& arguments)
+bool Creature::Loot(const vector<string>& args)
 {
-	Creature *target = (Creature*)parent->Find(arguments, CREATURE);
+	Creature *target = (Creature*)parent->Find(args[1], CREATURE);
 
 	if(target == NULL && target->IsAlive() == false)
 		return false;

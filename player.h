@@ -11,16 +11,16 @@ public:
 	Player(const char* name, const char* description, Room* room);
 	~Player();
 
-	bool Go(const string& direction);
-	void Look(const string& arguments) const;
-	bool Take(const string& arguments);
-	bool Drop(const string& arguments);
+	bool Go(const vector<string>& args);
+	void Look(const vector<string>& args) const;
+	bool Take(const vector<string>& args);
+	bool Drop(const vector<string>& args);
 	void Inventory() const;
-	bool Equip(const string& arguments);
-	bool UnEquip(const string& arguments);
-	bool Examine(const string& arguments) const;
-	bool Attack(const string& arguments);
-	bool Loot(const string& arguments);
+	bool Equip(const vector<string>& args);
+	bool UnEquip(const vector<string>& args);
+	bool Examine(const vector<string>& args) const;
+	bool Attack(const vector<string>& args);
+	bool Loot(const vector<string>& args);
 
 public :
 

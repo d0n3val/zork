@@ -18,21 +18,24 @@ Player::~Player()
 }
 
 // ----------------------------------------------------
-void Player::Look(const string& arguments) const
+void Player::Look(const vector<string>& args) const
 {
-	for(list<Entity*>::const_iterator it = parent->container.begin(); it != parent->container.cend(); ++it)
+	if(args.size() > 1)
 	{
-		if(Same((*it)->name, arguments) || ((*it)->type == EXIT && Same(arguments, ((Exit*)(*it))->GetNameFrom((Room*)parent))))
+		for(list<Entity*>::const_iterator it = parent->container.begin(); it != parent->container.cend(); ++it)
 		{
-			(*it)->Look();
-			return;
+			if(Same((*it)->name, args[1]) || ((*it)->type == EXIT && Same(args[1], ((Exit*)(*it))->GetNameFrom((Room*)parent))))
+			{
+				(*it)->Look();
+				return;
+			}
 		}
-	}
 
-	if(Same(arguments, "me"))
-	{
-		cout << "\n" << name << "\n";
-		cout << description << "\n";
+		if(Same(args[1], "me"))
+		{
+			cout << "\n" << name << "\n";
+			cout << description << "\n";
+		}
 	}
 	else
 	{
@@ -41,9 +44,9 @@ void Player::Look(const string& arguments) const
 }
 
 // ----------------------------------------------------
-bool Player::Go(const string& direction)
+bool Player::Go(const vector<string>& args)
 {
-	Exit* exit = GetRoom()->GetExit(direction);
+	Exit* exit = GetRoom()->GetExit(args[1]);
 
 	if(exit == NULL)
 	{
@@ -51,8 +54,8 @@ bool Player::Go(const string& direction)
 		return false;
 	}
 
-	cout << "\nYou take direction " << direction << "...\n";
-	ChangeParentTo(exit->GetDestinationFrom((Room*)parent));
+	cout << "\nYou take direction " << exit->GetNameFrom((Room*) parent) << "...\n";
+	ChangeParentTo(exit->GetDestinationFrom((Room*) parent));
 	parent->Look();
 
 	return true;
@@ -60,9 +63,9 @@ bool Player::Go(const string& direction)
 
 
 // ----------------------------------------------------
-bool Player::Take(const string& arguments)
+bool Player::Take(const vector<string>& args)
 {
-	Item* item = (Item*)parent->Find(arguments, ITEM);
+	Item* item = (Item*)parent->Find(args[1], ITEM);
 
 	if(item == NULL)
 	{
@@ -102,9 +105,9 @@ void Player::Inventory() const
 }
 
 // ----------------------------------------------------
-bool Player::Drop(const string& arguments)
+bool Player::Drop(const vector<string>& args)
 {
-	Item* item = (Item*)Find(arguments, ITEM);
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 	{
@@ -119,9 +122,9 @@ bool Player::Drop(const string& arguments)
 }
 
 // ----------------------------------------------------
-bool Player::Equip(const string& arguments)
+bool Player::Equip(const vector<string>& args)
 {
-	Item* item = (Item*)Find(arguments, ITEM);
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 	{
@@ -150,12 +153,12 @@ bool Player::Equip(const string& arguments)
 }
 
 // ----------------------------------------------------
-bool Player::UnEquip(const string& arguments)
+bool Player::UnEquip(const vector<string>& args)
 {
 	if(!IsAlive())
 		return false;
 
-	Item* item = (Item*)Find(arguments, ITEM);
+	Item* item = (Item*)Find(args[1], ITEM);
 
 	if(item == NULL)
 	{
@@ -179,13 +182,13 @@ bool Player::UnEquip(const string& arguments)
 }
 
 // ----------------------------------------------------
-bool Player::Examine(const string& arguments) const
+bool Player::Examine(const vector<string>& args) const
 {
-	Creature *target = (Creature*) parent->Find(arguments, CREATURE);
+	Creature *target = (Creature*)parent->Find(args[1], CREATURE);
 
 	if(target == NULL)
 	{
-		cout << "\n" << arguments << " is not here.\n";
+		cout << "\n" << args[1] << " is not here.\n";
 		return false;
 	}
 
@@ -196,13 +199,13 @@ bool Player::Examine(const string& arguments) const
 }
 
 // ----------------------------------------------------
-bool Player::Attack(const string& arguments)
+bool Player::Attack(const vector<string>& args)
 {
-	Creature *target = (Creature*)parent->Find(arguments, CREATURE);
+	Creature *target = (Creature*)parent->Find(args[1], CREATURE);
 
 	if(target == NULL)
 	{
-		cout << "\n" << arguments << " is not here.";
+		cout << "\n" << args[1] << " is not here.";
 		return false;
 	}
 
@@ -212,19 +215,19 @@ bool Player::Attack(const string& arguments)
 }
 
 // ----------------------------------------------------
-bool Player::Loot(const string& arguments)
+bool Player::Loot(const vector<string>& args)
 {
-	Creature *target = (Creature*)parent->Find(arguments, CREATURE);
+	Creature *target = (Creature*)parent->Find(args[1], CREATURE);
 
 	if(target == NULL)
 	{
-		cout << "\n" << arguments << " is not here.\n";
+		cout << "\n" << args[1] << " is not here.\n";
 		return false;
 	}
 
 	if(target->IsAlive() == true)
 	{
-		cout << "\n" << arguments << " cannot be looted until it is killed.\n";
+		cout << "\n" << target->name << " cannot be looted until it is killed.\n";
 		return false;
 	}
 

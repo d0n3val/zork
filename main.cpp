@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <conio.h>
 #include "globals.h"
 #include "world.h"
@@ -9,17 +10,19 @@ using namespace std;
 // -------------------------------------------------
 int main()
 {
+	char key;
+	string player_input;
+	vector<string> args(10);
+	args.clear();
+
 	cout << "Welcome to MyZork!\n";
 	cout << "----------------\n";
-	string player_input;
 
 	World my_world;
-	my_world.Tick("look", "");
+	args.push_back("look");
+	my_world.Tick(args);
+	args.clear();
 	cout << "> ";
-
-	string command;
-	string arguments;
-	char key;
 
 	while(1)
 	{
@@ -41,31 +44,19 @@ int main()
 				player_input += key;
 				cout << key;
 			}
-
 			else
-			{	
-				size_t pos = player_input.find(' ');
-
-				command = player_input;
-
-				if(pos != string::npos)
-				{
-					command = player_input.substr(0, pos);
-					arguments = player_input.substr(pos + 1);
-				}
-			}
+				Tokenize(player_input, args);
 		}
 
-		if(Same(command, "quit"))
+		if(args.size() > 0 && Same(args[0], "quit"))
 			break;
 
-		if(my_world.Tick(command, arguments) == false)
+		if(my_world.Tick(args) == false)
 			cout << "\nSorry, I do not understand your command.\n";
 
-		if(command.length() > 0)
+		if(args.size() > 0)
 		{
-			command = "";
-			arguments = "";
+			args.clear();
 			player_input = "";
 			cout << "> ";
 		}
