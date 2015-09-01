@@ -21,7 +21,6 @@ World::World()
 	Exit* ex1 = new Exit("west", "east", "Little path", house, forest);
 	Exit* ex2 = new Exit("down", "up", "Stairs", house, basement);
 	ex2->locked = true;
-	
 
 	entities.push_back(forest);
 	entities.push_back(house);
@@ -38,7 +37,7 @@ World::World()
 
 	// Items -----
 	Item* mailbox = new Item("Mailbox", "Looks like it might contain something.", house);
-	Item* key = new Item("Key", "Old iron key.", house);
+	Item* key = new Item("Key", "Old iron key.", mailbox);
 	ex2->key = key;
 
 	Item* sword = new Item("Sword", "A simple old and rusty sword.", forest, WEAPON);
@@ -199,6 +198,10 @@ bool World::ParseCommand(vector<string>& args)
 			else if(Same(args[0], "lock") || Same(args[0], "lk"))
 			{
 				player->Lock(args);
+			}
+			else if(Same(args[0], "take") || Same(args[0], "pick"))
+			{
+				player->Take(args);
 			}
 			else
 				ret = false;

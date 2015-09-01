@@ -71,16 +71,44 @@ bool Player::Go(const vector<string>& args)
 // ----------------------------------------------------
 bool Player::Take(const vector<string>& args)
 {
-	Item* item = (Item*)parent->Find(args[1], ITEM);
-
-	if(item == NULL)
+	if(args.size() > 1)
 	{
-		cout << "\nThere is no item here with that name.\n";
-		return false;
-	}
+		Item* item = (Item*)parent->Find(args[3], ITEM);
 
-	cout << "\nYou take " << item->name << "...\n";
-	item->ChangeParentTo(this);
+		// we could pick something from a container in our inventory ...
+		if(item == NULL)
+			item = (Item*)Find(args[3], ITEM);
+
+		if(item == NULL)
+		{
+			cout << "\nCannot find '" << args[3] << "' in this room or in your inventory.\n";
+			return false;
+		}
+
+		Item* subitem = (Item*)item->Find(args[1], ITEM);
+
+		if(subitem == NULL)
+		{
+			cout << "\n" << item->name << " does not contain '" << args[1] << "'.\n";
+			return false;
+		}
+
+		cout << "\nYou take " << subitem->name << " from " << item->name << ".\n";
+		subitem->ChangeParentTo(this);
+	}
+	else
+	{
+		Item* item = (Item*)parent->Find(args[1], ITEM);
+
+		if(item == NULL)
+		{
+			cout << "\nThere is no item here with that name.\n";
+			return false;
+		}
+
+		cout << "\nYou take " << item->name << ".\n";
+		item->ChangeParentTo(this);
+	}
 
 	return true;
 }
@@ -281,13 +309,13 @@ bool Player::Lock(const vector<string>& args)
 
 	if(item == NULL)
 	{
-		cout << "\Item '" << args[3] << "' not found in your inventory.\n";
+		cout << "\nItem '" << args[3] << "' not found in your inventory.\n";
 		return false;
 	}
 
 	if(exit->key != item)
 	{
-		cout << "\Item '" << item->name << "' is not the key for " << exit->GetNameFrom((Room*)parent) << ".\n";
+		cout << "\nItem '" << item->name << "' is not the key for " << exit->GetNameFrom((Room*)parent) << ".\n";
 		return false;
 	}
 

@@ -62,11 +62,31 @@ bool Creature::Take(const vector<string>& args)
 
 	Item* item = (Item*)parent->Find(args[1], ITEM);
 
+	if(args.size() > 1)
+	{
+		// we could pick something from a container in our inventory ...
+		if(item == NULL)
+			item = (Item*)Find(args[1], ITEM);
+
+		if(item == NULL)
+			return false;
+
+		Item* subitem = (Item*)item->Find(args[3], ITEM);
+
+		if(subitem == NULL)
+			return false;
+
+		if(PlayerInRoom())
+			cout << name << " looks into " << item->name << "...\n";
+
+		item = subitem;
+	}
+
 	if(item == NULL)
 		return false;
 
 	if(PlayerInRoom())
-		cout << name << " takes " << item->name << "...\n";
+		cout << name << " takes " << item->name << ".\n";
 
 	item->ChangeParentTo(this);
 
