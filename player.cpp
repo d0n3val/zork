@@ -71,7 +71,7 @@ bool Player::Go(const vector<string>& args)
 // ----------------------------------------------------
 bool Player::Take(const vector<string>& args)
 {
-	if(args.size() > 1)
+	if(args.size() == 4)
 	{
 		Item* item = (Item*)parent->Find(args[3], ITEM);
 
@@ -96,7 +96,7 @@ bool Player::Take(const vector<string>& args)
 		cout << "\nYou take " << subitem->name << " from " << item->name << ".\n";
 		subitem->ChangeParentTo(this);
 	}
-	else
+	else if(args.size() == 2)
 	{
 		Item* item = (Item*)parent->Find(args[1], ITEM);
 
@@ -110,7 +110,7 @@ bool Player::Take(const vector<string>& args)
 		item->ChangeParentTo(this);
 	}
 
-	return true;
+	return false;
 }
 
 // ----------------------------------------------------
@@ -141,18 +141,47 @@ void Player::Inventory() const
 // ----------------------------------------------------
 bool Player::Drop(const vector<string>& args)
 {
-	Item* item = (Item*)Find(args[1], ITEM);
-
-	if(item == NULL)
+	if(args.size() == 2)
 	{
-		cout << "\nThere is no item on you with that name.\n";
-		return false;
+		Item* item = (Item*)Find(args[1], ITEM);
+
+		if(item == NULL)
+		{
+			cout << "\nThere is no item on you with that name.\n";
+			return false;
+		}
+
+		cout << "\nYou drop " << item->name << "...\n";
+		item->ChangeParentTo(parent);
+
+		return true;
 	}
+	else if(args.size() == 4)
+	{
+		Item* item = (Item*)Find(args[1], ITEM);
 
-	cout << "\nYou drop " << item->name << "...\n";
-	item->ChangeParentTo(parent);
+		if(item == NULL)
+		{
+			cout << "\nCan not find '" << args[1] << "' in your inventory.\n";
+			return false;
+		}
 
-	return true;
+		Item* container = (Item*)parent->Find(args[3], ITEM);
+
+		if(container == NULL)
+		{
+			container = (Item*)Find(args[3], ITEM);
+			cout << "\nCan not find '" << args[3] << "' in your inventory or in the room.\n";
+			return false;
+		}
+
+		cout << "\nYou put " << item->name << " into " << container->name << ".\n";
+		item->ChangeParentTo(container);
+
+		return true;
+	}
+	
+	return false;
 }
 
 // ----------------------------------------------------
@@ -162,7 +191,7 @@ bool Player::Equip(const vector<string>& args)
 
 	if(item == NULL)
 	{
-		cout << "\n" << item->name << " is not in your inventory.\n";
+		cout << "\nCannot find '" << args[1] << "' is not in your inventory.\n";
 		return false;
 	}
 

@@ -131,6 +131,16 @@ bool World::ParseCommand(vector<string>& args)
 				(args.size() == 1) ? args.push_back("west") : args[1] = "west";
 				player->Go(args);
 			}
+			else if(Same(args[0], "up") || Same(args[0], "u"))
+			{
+				(args.size() == 1) ? args.push_back("up") : args[1] = "up";
+				player->Go(args);
+			}
+			else if(Same(args[0], "down") || Same(args[0], "d"))
+			{
+				(args.size() == 1) ? args.push_back("down") : args[1] = "down";
+				player->Go(args);
+			}
 			else if(Same(args[0], "stats") || Same(args[0], "st"))
 			{
 				player->Stats();
@@ -157,7 +167,7 @@ bool World::ParseCommand(vector<string>& args)
 			{
 				player->Take(args);
 			}
-			else if(Same(args[0], "drop") || Same(args[0], "remove"))
+			else if(Same(args[0], "drop") || Same(args[0], "put"))
 			{
 				player->Drop(args);
 			}
@@ -202,6 +212,10 @@ bool World::ParseCommand(vector<string>& args)
 			else if(Same(args[0], "take") || Same(args[0], "pick"))
 			{
 				player->Take(args);
+			}
+			else if(Same(args[0], "drop") || Same(args[0], "put"))
+			{
+				player->Drop(args);
 			}
 			else
 				ret = false;

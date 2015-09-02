@@ -7,6 +7,11 @@
 
 using namespace std;
 
+#define BACKSPACE "\033[D\033[K"
+
+#define WHITE_ "\033[1;36m"
+#define _WHITE "\033[0m"
+
 // -------------------------------------------------
 int main()
 {
@@ -15,7 +20,7 @@ int main()
 	vector<string> args;
 	args.reserve(10);
 
-	cout << "Welcome to MyZork!\n";
+	cout << WHITE_ "Welcome to MyZork!\n" _WHITE;
 	cout << "----------------\n";
 
 	World my_world;
@@ -31,7 +36,8 @@ int main()
 			{
 				if(player_input.length() > 0)
 				{
-					player_input[player_input.length() - 1] = '\0';
+					player_input.pop_back();
+					//cout << BACKSPACE;
 					cout << '\b';
 					cout << " ";
 					cout << '\b';
